@@ -1,0 +1,36 @@
+
+.social-icons::after
+{
+  content: "";
+  display: block;
+  width: 2px;
+  height: 90px;
+  background-color: var(--dark-slate);
+  margin: 0px auto;
+}
+
+.social-icons-list-item:hover
+{
+   transform: translateY(-4px);
+}
+
+.social-icons-list-item:last-child {
+        margin-bottom: 1rem;
+      }
+
+.social-icons-list-item-link
+{
+  transition: all 0.35s ease-in-out;
+}
+
+.social-icons-list-item-link:hover
+{
+  color: var(--theme-color);
+}
+
+.social-icons-list-item-link:focus
+{
+  outline-color:var(--theme-color);
+  transform: translateY(-4px);
+  color: var(--theme-color);
+}

@@ -1,0 +1,85 @@
+.section-title {
+    font-size: clamp(1.875rem, 1.5rem + 1.5vw, 2.25rem);
+}
+
+.job-role {
+    font-size: clamp(1.1rem, 1rem + 0.5vw, 1.25rem);
+}
+
+.job-dates {
+    font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.875rem);
+}
+
+.job-description-item {
+    font-size: clamp(0.9rem, 0.8rem + 0.25vw, 1rem);
+}
+
+@media (max-width: 767.98px) {
+    .experience-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .experience-tabs {
+        display: flex;
+        overflow-x: auto;
+        border-left: none;
+        padding-bottom: 20px;
+        border-bottom: 2px solid var(--lightest-navy, #303c55);
+    }
+
+    .vertical-tab-ui {
+        display: none;
+    }
+
+    .tab-item.active {
+        border-left: 2px solid var(--theme-color);
+    }
+
+    .tab-item.active span {
+        color: var(--theme-color);
+        font-weight: 600;
+    }
+
+    .experience-content {
+        margin-top: 1.5rem;
+    }
+
+    .job-description-item {
+        width: 100%;
+        padding-left: 1.25rem;
+    }
+
+    .job-description-item span {
+        left: 0;
+    }
+}
+
+@media (min-width: 640px) {
+    .experience-section {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .experience-section {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+
+    .title-wrapper {
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .title-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .tab-item {
+        padding-left: 0;
+    }
+}

@@ -1,0 +1,28 @@
+
+.email::after
+{
+  content: "";
+  display: block;
+  width: 2px;
+  height: 110px;
+  background-color: var(--dark-slate);
+  margin: 0px auto;
+}
+
+.email-link{
+  transition: all 0.3s ease-in-out;
+}
+
+.email-link:hover
+{
+  color: var(--theme-color);
+  transform: translateX(-5px);
+  rotate: 0;
+}
+
+.email-link:focus
+{
+  outline-color:var(--theme-color) ;
+    transform: translateY(-4px);
+  color: var(--theme-color);
+}
