@@ -1,25 +1,15 @@
 /** @type {import('next').NextConfig} */
 
-// Check if the current environment is for GitHub Pages deployment.
-// The 'GITHUB_ACTIONS' environment variable is automatically set to 'true' in GitHub Actions.
-const isGithubActions = process.env.GITHUB_ACTIONS === 'true';
-
-const repo = 'portfolio'; // Replace with your repository name
-
 // Import MDX wrapper
 const withMDX = require('@next/mdx')({
   extension: /\.mdx?$/,
 });
 
 const nextConfig = {
-  // Keep your GitHub Pages export logic
-  output: isGithubActions ? 'export' : undefined,
-
-  basePath: isGithubActions ? `/${repo}` : '',
-  assetPrefix: isGithubActions ? `/${repo}/` : '',
-
+  // Disabling unoptimized images as it's not needed for Vercel deployment.
+  // Vercel can handle image optimization automatically.
   images: {
-    unoptimized: true, // keep this for static export
+    unoptimized: false,
   },
 
   // Enable MDX page extensions
