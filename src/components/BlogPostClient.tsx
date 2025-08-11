@@ -3,13 +3,33 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion} from "framer-motion";
+import { motion } from "framer-motion";
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
-import { CustomH2, CustomP, CustomUl, CustomLi, CustomA, CustomBlockquote, CustomHr } from '@/components/MdxComponents';
+import { 
+  CustomH2, 
+  CustomP, 
+  CustomUl, 
+  CustomLi, 
+  CustomA, 
+  CustomBlockquote, 
+  CustomHr 
+} from '@/components/MdxComponents';
 import { FiArrowRight, FiShare2, FiHeart, FiEye } from 'react-icons/fi';
 
-const components = { h2: CustomH2, p: CustomP, ul: CustomUl, li: CustomLi, a: CustomA, blockquote: CustomBlockquote, hr: CustomHr };
+// Define the components mapping for MDXRemote.
+// This is the most likely place the build was failing, as a missing import
+// or a missing key here would cause a 'undefined' component error.
+const components = { 
+  h2: CustomH2, 
+  p: CustomP, 
+  ul: CustomUl, 
+  li: CustomLi, 
+  a: CustomA, 
+  blockquote: CustomBlockquote, 
+  hr: CustomHr 
+};
 
+// Define the type for a single post
 type PostData = {
   slug: string;
   title: string;
@@ -36,14 +56,23 @@ export default function BlogPostClient({ initialPostData }: { initialPostData: P
       setUserHasLiked(true);
     }
     
+    // Function to increment the view count
     const incrementView = async () => {
-      const response = await fetch(`/api/views/${slug}`, { method: 'POST' });
-      const data = await response.json();
-      if (response.ok) {
-        setViews(data.views);
+      // Use try/catch for robust error handling
+      try {
+        const response = await fetch(`/api/views/${slug}`, { method: 'POST' });
+        const data = await response.json();
+        if (response.ok) {
+          setViews(data.views);
+        } else {
+          console.error('Failed to increment view count:', data.message);
+        }
+      } catch (e) {
+        console.error('An error occurred while incrementing views:', e);
       }
     };
     
+    // Call the function when the component mounts
     incrementView();
   }, [initialPostData.slug]);
 
@@ -56,18 +85,39 @@ export default function BlogPostClient({ initialPostData }: { initialPostData: P
     setUserHasLiked(newLikedState);
     setLikes(prevLikes => newLikedState ? prevLikes + 1 : prevLikes - 1);
 
-    if (newLikedState) {
-      localStorage.setItem(likedKey, 'true');
-      await fetch(`/api/likes/${slug}`, { method: 'POST' });
-    } else {
-      localStorage.removeItem(likedKey);
-      await fetch(`/api/likes/${slug}`, { method: 'DELETE' });
+    // Use try/catch for robust error handling on API calls
+    try {
+      if (newLikedState) {
+        localStorage.setItem(likedKey, 'true');
+        await fetch(`/api/likes/${slug}`, { method: 'POST' });
+      } else {
+        localStorage.removeItem(likedKey);
+        await fetch(`/api/likes/${slug}`, { method: 'DELETE' });
+      }
+    } catch (e) {
+      console.error('An error occurred while liking the post:', e);
+      // Revert state on error
+      setUserHasLiked(!newLikedState);
+      setLikes(initialPostData.likes);
+    } finally {
+      setIsLiking(false);
     }
   };
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href);
+      // Check if navigator.clipboard.writeText is available
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(window.location.href);
+      } else {
+        // Fallback for older browsers or if navigator.clipboard is not available
+        const textarea = document.createElement('textarea');
+        textarea.value = window.location.href;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -116,6 +166,7 @@ export default function BlogPostClient({ initialPostData }: { initialPostData: P
 
         <hr className="my-8 border-neutral-200" />
         <article className='text-justify'>
+          {/* Render the MDX content using the components mapping */}
           <MDXRemote {...initialPostData.mdxSource} components={components} />
         </article>
         
