@@ -29,6 +29,14 @@ export default async function PostPage({ params }: { params: { slug: string } })
     notFound();
   }
 
+  // Ensure that postData.mdxSource and postData.mdxSource.compiledSource
+  // are defined to prevent errors. This is handled by the getPostData
+  // function, but this extra check can prevent unexpected issues.
+  if (!postData.mdxSource) {
+    console.error(`MDX source not found for slug: ${params.slug}`);
+    notFound();
+  }
+
   return (
     <div className="graph-paper-bg">
       <BlogPostClient initialPostData={postData} />
