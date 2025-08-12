@@ -9,7 +9,14 @@ async function updateLikes(slug: string, incrementValue: number) {
     
     const result = await db.collection('blogs').findOneAndUpdate(
       { slug: slug },
-      { $inc: { likes: incrementValue } },
+      { 
+        $inc: { likes: incrementValue },
+        // Add this to ensure the document is created correctly on the first like
+        $setOnInsert: {
+            slug: slug,
+            views: 0
+        }
+      },
       { returnDocument: 'after', upsert: true }
     );
 
@@ -18,7 +25,7 @@ async function updateLikes(slug: string, incrementValue: number) {
     if (updatedPost) {
       return NextResponse.json({ likes: updatedPost.likes });
     } else {
-      return NextResponse.json({ message: 'Post not found' }, { status: 404 });
+      return NextResponse.json({ message: 'Could not update post' }, { status: 500 });
     }
   } catch (e) {
     console.error(e);

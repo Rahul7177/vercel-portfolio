@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '../../../../../lib/mongodb';
 
-// This function specifically handles POST requests
 export async function POST(
   request: NextRequest, 
   { params }: { params: { slug: string } }
@@ -14,19 +13,30 @@ export async function POST(
     
     const result = await db.collection('blogs').findOneAndUpdate(
       { slug: slug },
-      { $inc: { views: 1 } },
-      { returnDocument: 'after', upsert: true }
+      { 
+        $inc: { views: 1 },
+        $setOnInsert: { slug: slug, likes: 0 } 
+      },
+      { 
+        returnDocument: 'after',
+        upsert: true
+      }
     );
 
-    const updatedPost = result?.value;
+    // --- Start of Fix ---
+    // The updated document is the result itself, not result.value
+    const updatedPost = result;
+    // --- End of Fix ---
 
     if (updatedPost) {
-      return NextResponse.json({ views: updatedPost.views });
+      return NextResponse.json({ views: updatedPost.views || 1 });
     } else {
-      return NextResponse.json({ message: 'Post not found' }, { status: 404 });
+      console.error('MongoDB operation failed: Document not found or created.');
+      return NextResponse.json({ message: 'Could not update or create post' }, { status: 500 });
     }
-  } catch (e) {
+  } catch (e: any) {
+    console.error('--- FATAL API ERROR ---');
     console.error(e);
-    return NextResponse.json({ message: 'An error occurred' }, { status: 500 });
+    return NextResponse.json({ message: 'Internal Server Error', error: e.message }, { status: 500 });
   }
 }

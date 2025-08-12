@@ -1,16 +1,5 @@
-/*
- * Tailwind CSS Directives
- * These three lines are essential for Tailwind to inject its styles.
- * They replace the older `@import "tailwindcss";` syntax.
- */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/*
- * Root variables for color, typography, and spacing
- * All of these are now correctly defined before any custom layers.
- */
 :root {
   --background: #ffffff;
   --foreground: #171717;
