@@ -12,7 +12,7 @@ import {
   CustomA, 
   CustomBlockquote, 
   CustomHr 
-} from '../components/MdxComponents';
+} from '@/components/MdxComponents';
 import { FiArrowRight, FiShare2, FiHeart, FiEye } from 'react-icons/fi';
 
 const components = { 

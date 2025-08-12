@@ -1,5 +1,5 @@
-import { getPostData, getAllPostSlugs } from "../../../../lib/posts";
-import BlogPostClient from "../../../components/BlogPostClient";
+import { getPostData, getAllPostSlugs } from "@/lib/posts";
+import BlogPostClient from "@/components/BlogPostClient";
 import { notFound } from 'next/navigation';
 import { Metadata } from "next";
 

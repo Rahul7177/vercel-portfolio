@@ -1,5 +1,5 @@
-import { getSortedPostsData } from '../../../lib/posts';
-import BlogListClient from '../../components/BlogListClient';
+import { getSortedPostsData } from '@/lib/posts';
+import BlogListClient from '@/components/BlogListClient';
 import { Metadata } from 'next';
 
 // Add metadata for the main blog page
